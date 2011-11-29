@@ -45,7 +45,10 @@ module PaperTrail
 
         class_attribute :skip
         self.skip = ([options[:skip]].flatten.compact || []).map &:to_s
-
+        
+        class_attribute :virtual
+        self.virtual = ([options[:virtual]].flatten.compact || []).map &:to_s
+        
         class_attribute :only
         self.only = ([options[:only]].flatten.compact || []).map &:to_s
 
@@ -197,7 +200,11 @@ module PaperTrail
       end
 
       def object_to_string(object)
-        object.attributes.except(*self.class.skip).to_yaml
+        attributes = object.attributes
+        self.class.virtual.each do |virtual_attribute|
+          attributes[virtual_attribute] = object.send(virtual_attribute)
+        end
+        attributes.except(*self.class.skip).to_yaml
       end
 
       def changed_notably?
