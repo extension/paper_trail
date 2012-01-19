@@ -201,6 +201,7 @@ module PaperTrail
 
       def object_to_string(object)
         attributes = object.attributes
+        # handle virtual attributes
         self.class.virtual.each do |virtual_attribute|
           attributes[virtual_attribute] = object.send(virtual_attribute)
         end
