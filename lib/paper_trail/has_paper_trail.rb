@@ -203,7 +203,9 @@ module PaperTrail
         attributes = object.attributes
         # handle virtual attributes
         self.class.virtual.each do |virtual_attribute|
-          attributes[virtual_attribute] = object.send(virtual_attribute)
+          if(attributes[virtual_attribute].nil?)
+            attributes[virtual_attribute] = object.send(virtual_attribute)
+          end
         end
         attributes.except(*self.class.skip).to_yaml
       end
