@@ -203,7 +203,7 @@ module PaperTrail
         attributes = object.attributes
         # handle virtual attributes
         self.class.virtual.each do |virtual_attribute|
-          if(attributes[virtual_attribute].nil?)
+          if(attributes[virtual_attribute.to_s].nil?)
             attributes[virtual_attribute] = object.send(virtual_attribute)
           end
         end
